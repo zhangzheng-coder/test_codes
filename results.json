@@ -1,14 +1,14 @@
 {
     "Problem": [
         {
-            "Lower bound": 153.675, 
+            "Lower bound": 279298730250.0, 
             "Name": "unknown", 
             "Number of constraints": 6, 
             "Number of nonzeros": 13, 
             "Number of objectives": 1, 
             "Number of variables": 7, 
             "Sense": "minimize", 
-            "Upper bound": 153.675
+            "Upper bound": 279298730250.0
         }
     ], 
     "Solution": [
@@ -22,19 +22,19 @@
             "Message": null, 
             "Objective": {
                 "objective": {
-                    "Value": 153.67499999999998
+                    "Value": 279298730250.0
                 }
             }, 
             "Problem": {}, 
             "Status": "feasible", 
             "Variable": {
-                "x[san-diego,new-york]": {
+                "x['San Diego, CA, USA','New York, NY, USA']": {
                     "Value": 325.0
                 }, 
-                "x[san-diego,topeka]": {
+                "x['San Diego, CA, USA','Topeka, KY, USA']": {
                     "Value": 275.0
                 }, 
-                "x[seattle,chicago]": {
+                "x['Seattle, WA, USA','Chicago, IL, USA']": {
                     "Value": 300.0
                 }
             }
@@ -51,7 +51,7 @@
             }, 
             "Status": "ok", 
             "Termination condition": "optimal", 
-            "Time": 0.007308006286621094
+            "Time": 0.01858210563659668
         }
     ]
 }
