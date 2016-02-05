@@ -10,7 +10,7 @@ import pprint
 # Replace the API key below with a valid API key.
 gmaps = googlemaps.Client(key='AIzaSyAh2PIcLDrPecSSR36z2UNubqphdHwIw7M')
  
-# Creation of a Concrete Model
+# Creation of a Concrete Model TEST
 model = ConcreteModel()
  
 ## Define sets ##
