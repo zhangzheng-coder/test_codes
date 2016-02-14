@@ -19,6 +19,14 @@ for plantRow in plantaSoup2:
 
 print plantNames
 
+plant_list = []
+power_list = []
 for plantRow in plantaSoup2:
+    power_list = []
     for hourly_power in plantRow.findAll('td'):
-            print hourly_power.text.encode('ascii', 'ignore')
+            power_list.append(hourly_power.text.encode('ascii', 'ignore'))
+    plant_list.append(power_list)
+
+df = pd.DataFrame(plant_list).T
+
+print df
