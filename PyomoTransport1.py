@@ -90,7 +90,6 @@ def objective_rule(model):
   return sum(model.c[i,j]*model.x[i,j] for i in model.i for j in model.j)
 model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')
  
- 
 ## Display of the output ##
 # Display x.l, x.m ;
 def pyomo_postprocess(options=None, instance=None, results=None):
@@ -107,4 +106,4 @@ if __name__ == '__main__':
     #sends results to stdout
     results.write()
     print("\nDisplaying Solution\n" + '-'*60)
-    pyomo_postprocess(None, instance, results)
+    pyomo_postprocess(None, None, results)
