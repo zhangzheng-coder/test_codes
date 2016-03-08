@@ -1,0 +1,48 @@
+# Sets
+set TimePeriods := T1 T2 T3 T4 T5;
+set GeneratorTypes := Type1 Type2 Type3;
+
+# Parameters
+param min_output := 
+Type1 850
+Type2 1250
+Type3 1500;
+
+param max_output :=
+Type1 2000
+Type2 1750
+Type3 4000;
+
+param cost_hr_min :=
+Type1 1000
+Type2 2600
+Type3 3000;
+
+param cost_incr_hr :=
+Type1 2
+Type2 1.3
+Type3 3;
+
+param cost_start_up :=
+Type1 2000
+Type2 1000
+Type3 500;
+
+param avail_generators :=
+Type1 12
+Type2 10
+Type3 5;
+
+param period_hrs :=
+T1 6
+T2 3
+T3 6
+T4 3
+T5 6;
+
+param demand :=
+T1 15000
+T2 30000
+T3 25000
+T4 40000
+T5 27000;
