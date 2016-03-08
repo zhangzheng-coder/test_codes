@@ -1,6 +1,13 @@
 # Import
 from pyomo.environ import *
 
+# Components:
+#   SETS_ALL_CAPS
+#   VarsCamelCase
+#   params_lower_case_with_underscores
+#   Constraints_Words_Capitalized_With_Underscores
+# SET_time_system
+
 cities = ['boston', 'chicago', 'dallas', 'kansas-cty', 'losangeles',
           'memphis', 'portland', 'salt-lake', 'wash-dc']
 model = ConcreteModel()
