@@ -12,7 +12,7 @@ cities = ['boston', 'chicago', 'dallas', 'kansas-cty', 'losangeles',
           'memphis', 'portland', 'salt-lake', 'wash-dc']
 model = ConcreteModel()
 model.nodes = Set(initialize=cities)
-model.routes = Set(initialize=model.nodes*model.nodes)
+model.routes = Set(initialize=model.nodes * model.nodes)
 
 # Parameters
 distances = {
@@ -33,7 +33,7 @@ distances = {
     ('dallas', 'losangeles'): 85,
     ('dallas', 'memphis'): 28,
     ('dallas', 'salt-lake'): 75,
-}
+    }
 
 model.distances = Param(model.routes, initialize=distances, doc='Distances')
 

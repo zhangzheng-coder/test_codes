@@ -93,7 +93,7 @@ model.max_output 	= Param(model.I, initialize=max_output_l)
 model.cost_hr_min 	= Param(model.I, initialize=cost_hr_min_l)
 model.cost_incr_hr 	= Param(model.I, initialize=cost_incr_hr_l)
 model.cost_start_up = Param(model.I, initialize=cost_start_up_l)
-model.avail_generators = Param(model.I, initialize=avail_generators_l) 
+model.avail_generators = Param(model.I, initialize=avail_generators_l)
 model.period_hrs	= Param(model.J, initialize=period_hrs_l)
 model.demand 		= Param(model.J, initialize=demand_l)
 
@@ -116,7 +116,7 @@ model.p = Var(model.J, domain=NonNegativeIntegers)
 # Define Objective
 def obj(mdl):
 	return sum(mdl.n[I,J]*mdl.period_hrs[J]*mdl.cost_hr_min[I]
-	+(mdl.x[I,J]-(mdl.n[I,J]*mdl.min_output[I]))*mdl.period_hrs[J]*mdl.cost_incr_hr[I] 
+	+(mdl.x[I,J]-(mdl.n[I,J]*mdl.min_output[I]))*mdl.period_hrs[J]*mdl.cost_incr_hr[I]
 	+mdl.s[I,J]*mdl.cost_start_up[I] for I in mdl.I for J in mdl.J)
 	+sum(mdl.hydro_cost_hr[HydroGeneratorTypes]*mdl.period_hrs[J]*mdl.h[HydroTypes,J]
 	+mdl.hydro_cost_start_up[HydroTypes]*mdl.t[HydroTypes,J]
@@ -125,26 +125,26 @@ model.CostTotal = Objective(rule=obj, sense=minimize)
 
 # Define Constraints
 def demand_rule(mdl, j):
-	return  (sum(mdl.x[i,j] for i in mdl.I) + sum(mdl.h[HydroTypes,j]*mdl.hydro_operating_level[HydroTypes] for HydroTypes in mdl.HydroGeneratorTypes) - mdl.p[j]) >= mdl.demand[j]  
+	return  (sum(mdl.x[i,j] for i in mdl.I) + sum(mdl.h[HydroTypes,j]*mdl.hydro_operating_level[HydroTypes] for HydroTypes in mdl.HydroGeneratorTypes) - mdl.p[j]) >= mdl.demand[j]
 model.DemandConstraint = Constraint(model.J, rule = demand_rule)
 
 def minimum_rule(mdl, i, j):
-	return mdl.x[i,j] >= mdl.min_output[i]*mdl.n[i,j]	
+	return mdl.x[i,j] >= mdl.min_output[i]*mdl.n[i,j]
 model.MinimumConstraint = Constraint(model.I, model.J, rule = minimum_rule)
 
 def maximum_rule(mdl, i, j):
-	return mdl.x[i,j] <= mdl.max_output[i]*mdl.n[i,j]	
+	return mdl.x[i,j] <= mdl.max_output[i]*mdl.n[i,j]
 model.MaximumConstraint = Constraint(model.I, model.J, rule = maximum_rule)
 
 def max_generator_rule(mdl, i, j):
-	return mdl.n[i,j] <= mdl.avail_generators[i] 
+	return mdl.n[i,j] <= mdl.avail_generators[i]
 model.Max_generatorConstraint = Constraint(model.I, model.J, rule = max_generator_rule)
 
 def start_up_rule(mdl, i, j):
 	kk = int(j[1])-1
 	if kk == 0:
 		kk = len(j)
-	k = 'T' + str(kk)	
+	k = 'T' + str(kk)
 	return mdl.s[i,j] >= mdl.n[i,j]-mdl.n[i,k]
 model.Start_up_rule = Constraint(model.I, model.J, rule = start_up_rule)
 
@@ -180,3 +180,16 @@ def pyomo_postprocess(options=None, instance=None, results=None):
 	model.t.display()
 	model.l.display()
 	model.p.display()
+
+# This is an optional code path that allows the script to be run outside of
+# pyomo command-line.  For example:  python transport.py
+if __name__ == '__main__':
+	from pyomo.opt import SolverFactory
+	# import pyomo.environ
+	opt = SolverFactory("gurobi")
+	instance = model.create_instance()
+	results = opt.solve(instance)
+# sends results to stdout
+	results.write()
+	print("\nDisplaying Solution\n" + '-' * 60)
+	pyomo_postprocess(None, instance, results)

@@ -45,9 +45,9 @@ if __name__ == '__main__':
     # This emulates what the pyomo command-line tools does
     from pyomo.opt import SolverFactory
     import pyomo.environ
-    opt = SolverFactory("gurobi")
+    opt = SolverFactory("glpk")
     results = opt.solve(model)
-# sends results to stdout
+    #sends results to stdout
     results.write()
     print("\nDisplaying Solution\n" + '-'*60)
-    pyomo_postprocess(None, instance, results)
+    pyomo_postprocess(None, None, results)

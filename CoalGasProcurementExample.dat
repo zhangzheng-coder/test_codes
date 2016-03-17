@@ -1,0 +1,30 @@
+set SCENARIOS := 1 2 3;
+
+#High Scenario -> 1
+#Medium Scenario -> 2
+#Low Scenario -> 3
+param probability_of_scenario :=
+1 0.3
+2 0.5
+3 0.2;
+
+param demand_0 := 750;
+
+param demand_s :=
+1 900
+2 750
+3 550;
+
+param coal_price_0 := 4.5;
+
+param gas_price_0 := 5.1;
+
+param coal_price_s :=
+1 7.5
+2 6.0
+3 3.0;
+
+param gas_price_s :=
+1 8.5
+2 5.5
+3 4.0;
