@@ -126,7 +126,7 @@ def pyomo_postprocess(options=None, instance=None, results=None):
 if __name__ == '__main__':
 	from pyomo.opt import SolverFactory
 	import pyomo.environ
-	opt = SolverFactory("gurobi")
+	opt = SolverFactory("glpk", tee=True)
 	instance = model.create_instance()
 	results = opt.solve(instance)
 # sends results to stdout
