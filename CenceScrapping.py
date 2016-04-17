@@ -24,22 +24,32 @@ def init_driver():
 
 driver = init_driver()
 
+df_month = pd.DataFrame()
+df_anual = pd.DataFrame()
+df_totals = pd.DataFrame()
 
 # This portion of the code is used to scrape the dispatch.
 
-for year_i in range(2015, 2016):
-    calendar = driver.wait.until(EC.presence_of_element_located((By.ID, "formPosdespacho:pickFechaInputDate")))
-    calendar.click()
+calendar = driver.wait.until(EC.presence_of_element_located((By.ID, "formPosdespacho:pickFechaInputDate")))
 
-    box = driver.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "rich-calendar-month")))
-    box.click()
+calendar.click()
 
-    year = driver.wait.until(EC.presence_of_element_located((By.ID, "formPosdespacho:pickFechaDateEditorLayoutY3")))
+box = driver.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "rich-calendar-month")))
+box.click()
+
+y = 2
+for year_i in range(2014, 2016):
+
+    print "Year Loop"
+    print year_i
+
+    year = driver.wait.until(EC.presence_of_element_located((By.ID, "formPosdespacho:pickFechaDateEditorLayoutY" + str(y))))
     year.click()
 
     time.sleep(1)
 
-    for month_i in range(2, 4):
+    print ' Month loop'
+    for month_i in range(4, 6):
 
         print month_i
 
@@ -60,9 +70,10 @@ for year_i in range(2015, 2016):
 
         time.sleep(1)
 
-        for day_i in range(2, 5):
+        print ' day loop'
+        for day_i in range(10, 13):
 
-            print day_i
+            print "     " + str(day_i) + " " + str(month_i) + " " + str(year_i)
 
             calendar = driver.wait.until(EC.presence_of_element_located((By.ID, "formPosdespacho:pickFechaInputDate")))
             calendar.click()
@@ -70,39 +81,42 @@ for year_i in range(2015, 2016):
             day.click()
             calendar.click()
             calendar.send_keys(Keys.RETURN)
-
-            print 'day loop'
             time.sleep(1)
-
             html = driver.page_source
-# Download into Python
+            # Download into Python
             soup = BeautifulSoup(html, 'html.parser')
-# Searches through HTML
+            # Searches through HTML
             table = soup.find('table', {"class": "tablaDatos"})
-# looks for the table, I have to look into the name or class.
-            col_headers = []
+            # looks for the table, I have to look into the name or class.
+            col_headers = ['año', 'mes', 'dia']
             for header in table.thead.findAll("tr")[0].findAll("th"):
                 col_headers.append(header.text)
             plants = []
             for row in table.tbody.findAll("tr"):
-                plant = []
+                date = [str(year_i), str(month_i), str(day_i)]
+                plant = date
                 for val in row.findAll("td"):
                     plant.append(val.text)
                 plants.append(plant)
 
-            df = pd.DataFrame(plants, columns=col_headers)
-# These two loops go around the cells and form the table of interest.
-
+            df_day = pd.DataFrame(plants, columns=col_headers)
+            # These two loops go around the cells and form the table of interest.
+            del df_day['Total']
+            df_month = df_month.append(df_day, ignore_index=True)
         calendar = driver.wait.until(EC.presence_of_element_located((By.ID, "formPosdespacho:pickFechaInputDate")))
         calendar.click()
         box = driver.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "rich-calendar-month")))
         box.click()
-        print 'Month re-start'
+
+    time.sleep(5)
+    df_anual = df_anual.append(df_month, ignore_index=True)
+    df_totals = df_totals.append(df_anual[df_anual.Planta == 'Total'], ignore_index=True)
+    df_anual = df_anual[df_anual.Planta != 'Total']
+    del df_totals['Planta']
+    y = 5
+
 
 # This portion of the code will stract the info from the exchanges
-
-
-
 driver.quit()
 driver = init_driver()
 
@@ -114,8 +128,15 @@ html[html.find('var chart_graficoIntercambios'):html.find('<!--END Script Block 
 
 Header = html[html.find('categories'):html.find('dataset seriesName=\'Real Norte\'')]
 
+hfound = re.findall(';&lt;category label=(.+?)showLabel', Header)
+
 RN = html[html.find('seriesName=\'Real Norte\''):html.find(';dataset seriesName=\'Real Sur\'')]
 
 RN = RN.replace(",", ".")
 
 found = re.findall('&lt;set value=\'(.+?)\'/&gt;', RN)
+
+nfound = []
+for x in found:
+    nfound.append(float(x.encode('ascii', 'ignore')))
+Header.encode('ascii', 'ignore')
