@@ -1,8 +1,5 @@
 
 # coding: utf-8
-
-# In[47]:
-
 import time
 import re
 from datetime import datetime
@@ -24,11 +21,9 @@ def init_driver():
 
 driver = init_driver()
 
-df_month = pd.DataFrame()
+# This portion of the code is used to scrape the post-dispatch.
 df_anual = pd.DataFrame()
 df_totals = pd.DataFrame()
-
-# This portion of the code is used to scrape the dispatch.
 
 calendar = driver.wait.until(EC.presence_of_element_located((By.ID, "formPosdespacho:pickFechaInputDate")))
 
@@ -48,10 +43,10 @@ for year_i in range(2014, 2016):
 
     time.sleep(1)
 
-    print ' Month loop'
+    df_month = pd.DataFrame()
     for month_i in range(4, 6):
 
-        print month_i
+        print ' Month loop ' + str(month_i)
 
         month = driver.wait.until(EC.presence_of_element_located((By.ID, "formPosdespacho:pickFechaDateEditorLayoutM" + str(month_i - 1))))
         month.click()
@@ -88,32 +83,126 @@ for year_i in range(2014, 2016):
             # Searches through HTML
             table = soup.find('table', {"class": "tablaDatos"})
             # looks for the table, I have to look into the name or class.
-            col_headers = ['año', 'mes', 'dia']
-            for header in table.thead.findAll("tr")[0].findAll("th"):
-                col_headers.append(header.text)
-            plants = []
+            df_day = pd.DataFrame()
             for row in table.tbody.findAll("tr"):
-                date = [str(year_i), str(month_i), str(day_i)]
-                plant = date
+                plant = []
+                df_plant = pd.DataFrame()
                 for val in row.findAll("td"):
                     plant.append(val.text)
-                plants.append(plant)
-
-            df_day = pd.DataFrame(plants, columns=col_headers)
+                df_plant = pd.DataFrame(plant)
+                df_plant.columns = df_plant.iloc[0]
+                df_plant = df_plant.drop(df_plant.index[[0, 25]])
+                df_day = df_day.T.append(df_plant.T)
+                df_day = df_day.T
+            datetime_list = []
+            for hour in range(0, 24):
+                datetime_list.append(datetime(year_i, month_i, day_i, int(hour)))
+            df_day['datetime'] = datetime_list
+            df_day = df_day.set_index('datetime')
             # These two loops go around the cells and form the table of interest.
-            del df_day['Total']
-            df_month = df_month.append(df_day, ignore_index=True)
+            df_month = df_month.append(df_day)
         calendar = driver.wait.until(EC.presence_of_element_located((By.ID, "formPosdespacho:pickFechaInputDate")))
         calendar.click()
         box = driver.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "rich-calendar-month")))
         box.click()
 
     time.sleep(5)
-    df_anual = df_anual.append(df_month, ignore_index=True)
-    df_totals = df_totals.append(df_anual[df_anual.Planta == 'Total'], ignore_index=True)
-    df_anual = df_anual[df_anual.Planta != 'Total']
-    del df_totals['Planta']
+    df_anual = df_anual.append(df_month)
     y = 5
+df_anual = df_anual.fillna(0)
+
+# This portion of the code is used to scrape the pre-dispatch.
+
+df_anual = pd.DataFrame()
+df_totals = pd.DataFrame()
+driver.quit()
+driver = init_driver()
+driver.get("http://appcenter.grupoice.com/CenceWeb/CencePredespachoTecnicoNacional.jsf")
+calendar = driver.wait.until(EC.presence_of_element_located((By.ID, "formPredespacho:pickFechaInputDate")))
+
+calendar.click()
+
+box = driver.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "rich-calendar-month")))
+box.click()
+
+y = 2
+for year_i in range(2014, 2016):
+
+    print "Year Loop"
+    print year_i
+
+    year = driver.wait.until(EC.presence_of_element_located((By.ID, "formPredespacho:pickFechaDateEditorLayoutY" + str(y))))
+    year.click()
+
+    time.sleep(1)
+
+    df_month = pd.DataFrame()
+    for month_i in range(4, 6):
+
+        print ' Month loop ' + str(month_i)
+
+        month = driver.wait.until(EC.presence_of_element_located((By.ID, "formPredespacho:pickFechaDateEditorLayoutM" + str(month_i - 1))))
+        month.click()
+
+        time.sleep(1)
+
+        ok = driver.wait.until(EC.presence_of_element_located((By.ID, "formPredespacho:pickFechaDateEditorButtonOk")))
+        ok.click()
+
+        time.sleep(1)
+
+        day_i = driver.wait.until(EC.presence_of_element_located((By.ID, "formPredespacho:pickFechaDayCell15")))
+        day_i.click()
+        calendar.click()
+        calendar.send_keys(Keys.RETURN)
+
+        time.sleep(1)
+
+        print ' day loop'
+        for day_i in range(10, 13):
+
+            print "     " + str(day_i) + " " + str(month_i) + " " + str(year_i)
+
+            calendar = driver.wait.until(EC.presence_of_element_located((By.ID, "formPredespacho:pickFechaInputDate")))
+            calendar.click()
+            day = driver.wait.until(EC.presence_of_element_located((By.ID, "formPredespacho:pickFechaDayCell" + str(day_i + (datetime(year_i, month_i, 1).weekday() - 1)))))
+            day.click()
+            calendar.click()
+            calendar.send_keys(Keys.RETURN)
+            time.sleep(1)
+            html = driver.page_source
+            # Download into Python
+            soup = BeautifulSoup(html, 'html.parser')
+            # Searches through HTML
+            table = soup.find('table', {"class": "tablaDatos"})
+            # looks for the table, I have to look into the name or class.
+            df_day = pd.DataFrame()
+            for row in table.tbody.findAll("tr"):
+                plant = []
+                df_plant = pd.DataFrame()
+                for val in row.findAll("td"):
+                    plant.append(val.text)
+                df_plant = pd.DataFrame(plant)
+                df_plant.columns = df_plant.iloc[0]
+                df_plant = df_plant.drop(df_plant.index[[0, 25]])
+                df_day = df_day.T.append(df_plant.T)
+                df_day = df_day.T
+            datetime_list = []
+            for hour in range(0, 24):
+                datetime_list.append(datetime(year_i, month_i, day_i, int(hour)))
+            df_day['datetime'] = datetime_list
+            df_day = df_day.set_index('datetime')
+            # These two loops go around the cells and form the table of interest.
+            df_month = df_month.append(df_day)
+        calendar = driver.wait.until(EC.presence_of_element_located((By.ID, "formPredespacho:pickFechaInputDate")))
+        calendar.click()
+        box = driver.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "rich-calendar-month")))
+        box.click()
+
+    time.sleep(5)
+    df_anual = df_anual.append(df_month)
+    y = 5
+df_anual = df_anual.fillna(0)
 
 
 # This portion of the code will stract the info from the exchanges
