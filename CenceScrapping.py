@@ -92,7 +92,7 @@ for year_i in range(2014, 2015):
         elif month_i == 12:
             number_of_days = 31
 
-        for day_i in range(20, number_of_days + 1):
+        for day_i in range(1, number_of_days + 1):
 
             print "     " + str(day_i) + " " + str(month_i) + " " + str(year_i)
 
@@ -153,7 +153,7 @@ box = driver.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "rich-cal
 box.click()
 
 y = 2
-for year_i in range(2014, 2015):
+for year_i in range(2015, 2016):
 
     print "Year Loop"
     print year_i
@@ -211,7 +211,7 @@ for year_i in range(2014, 2015):
             number_of_days = 31
 
         print ' day loop'
-        for day_i in range(20, number_of_days):
+        for day_i in range(1, number_of_days):
 
             print "     " + str(day_i) + " " + str(month_i) + " " + str(year_i)
 
