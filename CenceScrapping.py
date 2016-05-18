@@ -19,11 +19,11 @@ def init_driver():
     driver.wait = WebDriverWait(driver, 5)
     return driver
 
-driver = init_driver()
-
 # This portion of the code is used to scrape the post-dispatch.
 df_anual = pd.DataFrame()
 df_totals = pd.DataFrame()
+driver = init_driver()
+driver.get("http://appcenter.grupoice.com/CenceWeb/CencePosdespachoNacional.jsf")
 
 calendar = driver.wait.until(EC.presence_of_element_located((By.ID, "formPosdespacho:pickFechaInputDate")))
 
@@ -33,7 +33,7 @@ box = driver.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "rich-cal
 box.click()
 
 y = 2
-for year_i in range(2014, 2016):
+for year_i in range(2014, 2015):
 
     print "Year Loop"
     print year_i
@@ -44,7 +44,7 @@ for year_i in range(2014, 2016):
     time.sleep(1)
 
     df_month = pd.DataFrame()
-    for month_i in range(4, 6):
+    for month_i in range(1, 12):
 
         print ' Month loop ' + str(month_i)
 
@@ -66,7 +66,33 @@ for year_i in range(2014, 2016):
         time.sleep(1)
 
         print ' day loop'
-        for day_i in range(10, 13):
+
+        if month_i == 1:
+            number_of_days = 31
+        elif month_i == 2:
+            number_of_days = 28
+        elif month_i == 3:
+            number_of_days = 31
+        elif month_i == 4:
+            number_of_days = 30
+        elif month_i == 5:
+            number_of_days = 31
+        elif month_i == 6:
+            number_of_days = 30
+        elif month_i == 7:
+            number_of_days = 30
+        elif month_i == 8:
+            number_of_days = 31
+        elif month_i == 9:
+            number_of_days = 30
+        elif month_i == 10:
+            number_of_days = 31
+        elif month_i == 11:
+            number_of_days = 30
+        elif month_i == 12:
+            number_of_days = 31
+
+        for day_i in range(20, number_of_days + 1):
 
             print "     " + str(day_i) + " " + str(month_i) + " " + str(year_i)
 
@@ -109,7 +135,8 @@ for year_i in range(2014, 2016):
     time.sleep(5)
     df_anual = df_anual.append(df_month)
     y = 5
-df_anual = df_anual.fillna(0)
+df_anual_Post = df_anual.fillna(0)
+df_anual_Post.to_csv('df_anual_Post.csv', encoding='utf-8')
 
 # This portion of the code is used to scrape the pre-dispatch.
 
@@ -126,7 +153,7 @@ box = driver.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "rich-cal
 box.click()
 
 y = 2
-for year_i in range(2014, 2016):
+for year_i in range(2014, 2015):
 
     print "Year Loop"
     print year_i
@@ -137,7 +164,7 @@ for year_i in range(2014, 2016):
     time.sleep(1)
 
     df_month = pd.DataFrame()
-    for month_i in range(4, 6):
+    for month_i in range(1, 12):
 
         print ' Month loop ' + str(month_i)
 
@@ -158,8 +185,33 @@ for year_i in range(2014, 2016):
 
         time.sleep(1)
 
+        if month_i == 1:
+            number_of_days = 31
+        elif month_i == 2:
+            number_of_days = 28
+        elif month_i == 3:
+            number_of_days = 31
+        elif month_i == 4:
+            number_of_days = 30
+        elif month_i == 5:
+            number_of_days = 31
+        elif month_i == 6:
+            number_of_days = 30
+        elif month_i == 7:
+            number_of_days = 30
+        elif month_i == 8:
+            number_of_days = 31
+        elif month_i == 9:
+            number_of_days = 30
+        elif month_i == 10:
+            number_of_days = 31
+        elif month_i == 11:
+            number_of_days = 30
+        elif month_i == 12:
+            number_of_days = 31
+
         print ' day loop'
-        for day_i in range(10, 13):
+        for day_i in range(20, number_of_days):
 
             print "     " + str(day_i) + " " + str(month_i) + " " + str(year_i)
 
@@ -202,30 +254,30 @@ for year_i in range(2014, 2016):
     time.sleep(5)
     df_anual = df_anual.append(df_month)
     y = 5
-df_anual = df_anual.fillna(0)
-
+df_anual_pre = df_anual.fillna(0)
+df_anual_pre.to_csv('df_anual_pre.csv', encoding='utf-8')
 
 # This portion of the code will stract the info from the exchanges
-driver.quit()
-driver = init_driver()
+#driver.quit()
+#driver = init_driver()
 
-driver.get("http://appcenter.grupoice.com/CenceWeb/CenceIntercambios.jsf?init=true")
+#driver.get("http://appcenter.grupoice.com/CenceWeb/CenceIntercambios.jsf?init=true")
 
-html = driver.page_source
+#html = driver.page_source
 
-html[html.find('var chart_graficoIntercambios'):html.find('<!--END Script Block for Chart graficoIntercambios-->')]
+#html[html.find('var chart_graficoIntercambios'):html.find('<!--END Script Block for Chart graficoIntercambios-->')]
 
-Header = html[html.find('categories'):html.find('dataset seriesName=\'Real Norte\'')]
+#Header = html[html.find('categories'):html.find('dataset seriesName=\'Real Norte\'')]
 
-hfound = re.findall(';&lt;category label=(.+?)showLabel', Header)
+#hfound = re.findall(';&lt;category label=(.+?)showLabel', Header)
 
-RN = html[html.find('seriesName=\'Real Norte\''):html.find(';dataset seriesName=\'Real Sur\'')]
+#RN = html[html.find('seriesName=\'Real Norte\''):html.find(';dataset seriesName=\'Real Sur\'')]
 
-RN = RN.replace(",", ".")
+#RN = RN.replace(",", ".")
 
-found = re.findall('&lt;set value=\'(.+?)\'/&gt;', RN)
+#found = re.findall('&lt;set value=\'(.+?)\'/&gt;', RN)
 
-nfound = []
-for x in found:
-    nfound.append(float(x.encode('ascii', 'ignore')))
-Header.encode('ascii', 'ignore')
+#nfound = []
+#for x in found:
+#    nfound.append(float(x.encode('ascii', 'ignore')))
+#Header.encode('ascii', 'ignore')
