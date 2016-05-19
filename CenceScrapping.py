@@ -32,8 +32,8 @@ calendar.click()
 box = driver.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "rich-calendar-month")))
 box.click()
 
-y = 2
-for year_i in range(2014, 2015):
+y = 3
+for year_i in range(2015, 2016):
 
     print "Year Loop"
     print year_i
@@ -92,7 +92,7 @@ for year_i in range(2014, 2015):
         elif month_i == 12:
             number_of_days = 31
 
-        for day_i in range(1, number_of_days + 1):
+        for day_i in range(1, (number_of_days + 1)):
 
             print "     " + str(day_i) + " " + str(month_i) + " " + str(year_i)
 
@@ -102,7 +102,7 @@ for year_i in range(2014, 2015):
             day.click()
             calendar.click()
             calendar.send_keys(Keys.RETURN)
-            time.sleep(1)
+            time.sleep(5)
             html = driver.page_source
             # Download into Python
             soup = BeautifulSoup(html, 'html.parser')
@@ -152,7 +152,7 @@ calendar.click()
 box = driver.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "rich-calendar-month")))
 box.click()
 
-y = 2
+y = 3
 for year_i in range(2015, 2016):
 
     print "Year Loop"
@@ -211,7 +211,7 @@ for year_i in range(2015, 2016):
             number_of_days = 31
 
         print ' day loop'
-        for day_i in range(1, number_of_days):
+        for day_i in range(1, (number_of_days + 1)):
 
             print "     " + str(day_i) + " " + str(month_i) + " " + str(year_i)
 
