@@ -80,7 +80,7 @@ for year_i in range(2015, 2016):
         elif month_i == 6:
             number_of_days = 30
         elif month_i == 7:
-            number_of_days = 30
+            number_of_days = 31
         elif month_i == 8:
             number_of_days = 31
         elif month_i == 9:
@@ -198,7 +198,7 @@ for year_i in range(2015, 2016):
         elif month_i == 6:
             number_of_days = 30
         elif month_i == 7:
-            number_of_days = 30
+            number_of_days = 31
         elif month_i == 8:
             number_of_days = 31
         elif month_i == 9:
@@ -332,7 +332,7 @@ for year_i in range(2014, 2016):
         elif month_i == 6:
             number_of_days = 30
         elif month_i == 7:
-            number_of_days = 30
+            number_of_days = 31
         elif month_i == 8:
             number_of_days = 31
         elif month_i == 9:
