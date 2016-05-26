@@ -19,10 +19,12 @@ def init_driver():
     driver.wait = WebDriverWait(driver, 5)
     return driver
 
+driver = init_driver()
+
+
 # This portion of the code is used to scrape the post-dispatch.
 df_anual = pd.DataFrame()
 df_totals = pd.DataFrame()
-driver = init_driver()
 driver.get("http://appcenter.grupoice.com/CenceWeb/CencePosdespachoNacional.jsf")
 
 calendar = driver.wait.until(EC.presence_of_element_located((By.ID, "formPosdespacho:pickFechaInputDate")))
@@ -32,8 +34,8 @@ calendar.click()
 box = driver.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "rich-calendar-month")))
 box.click()
 
-y = 3
-for year_i in range(2015, 2016):
+y = 1
+for year_i in range(2013, 2016):
 
     print "Year Loop"
     print year_i
@@ -44,7 +46,7 @@ for year_i in range(2015, 2016):
     time.sleep(1)
 
     df_month = pd.DataFrame()
-    for month_i in range(1, 12):
+    for month_i in range(1, 13):
 
         print ' Month loop ' + str(month_i)
 
@@ -65,7 +67,7 @@ for year_i in range(2015, 2016):
 
         time.sleep(1)
 
-        print ' day loop'
+        print ' day loop post-dispatch'
 
         if month_i == 1:
             number_of_days = 31
@@ -152,8 +154,8 @@ calendar.click()
 box = driver.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "rich-calendar-month")))
 box.click()
 
-y = 3
-for year_i in range(2015, 2016):
+y = 1
+for year_i in range(2013, 2016):
 
     print "Year Loop"
     print year_i
@@ -164,7 +166,7 @@ for year_i in range(2015, 2016):
     time.sleep(1)
 
     df_month = pd.DataFrame()
-    for month_i in range(1, 12):
+    for month_i in range(1, 13):
 
         print ' Month loop ' + str(month_i)
 
@@ -188,7 +190,7 @@ for year_i in range(2015, 2016):
         if month_i == 1:
             number_of_days = 31
         elif month_i == 2:
-            number_of_days = 28
+            number_of_days = 29
         elif month_i == 3:
             number_of_days = 31
         elif month_i == 4:
@@ -210,7 +212,7 @@ for year_i in range(2015, 2016):
         elif month_i == 12:
             number_of_days = 31
 
-        print ' day loop'
+        print ' day loop pre-dispatch'
         for day_i in range(1, (number_of_days + 1)):
 
             print "     " + str(day_i) + " " + str(month_i) + " " + str(year_i)
@@ -257,9 +259,9 @@ for year_i in range(2015, 2016):
 df_anual_pre = df_anual.fillna(0)
 df_anual_pre.to_csv('df_anual_pre.csv', encoding='utf-8')
 
+
 # Code for the exchanges
-driver.quit()
-driver = init_driver()
+# driver.quit()
 
 
 def proc_html_data(transfer):
@@ -284,8 +286,8 @@ calendar.click()
 box = driver.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "rich-calendar-month")))
 box.click()
 
-y = 2
-for year_i in range(2014, 2016):
+y = 3
+for year_i in range(2015, 2016):
 
     print "Year Loop"
     print year_i
@@ -296,7 +298,7 @@ for year_i in range(2014, 2016):
     time.sleep(1)
 
     df_month = pd.DataFrame()
-    for month_i in range(5, 7):
+    for month_i in range(1, 13):
 
         print ' Month loop ' + str(month_i)
 
@@ -317,7 +319,7 @@ for year_i in range(2014, 2016):
 
         time.sleep(1)
 
-        print ' day loop'
+        print ' day loop Transfers'
 
         if month_i == 1:
             number_of_days = 31
@@ -344,7 +346,7 @@ for year_i in range(2014, 2016):
         elif month_i == 12:
             number_of_days = 31
 
-        for day_i in range(1, 4):
+        for day_i in range(1, (number_of_days + 1)):
 
             print "     " + str(day_i) + " " + str(month_i) + " " + str(year_i)
 
