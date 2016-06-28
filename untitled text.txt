@@ -1,1 +1,45 @@
 AIzaSyAh2PIcLDrPecSSR36z2UNubqphdHwIw7M
+
+-- The following two joins produce identical results but use different syntax.
+SELECT index, year, scenario, price_trgt, basis, feedstck, fcode, produnit, 
+      production, "State Abbreviation", "State FIPS Code", "County FIPS Code", 
+      "FIPS Entity Code", "ANSI Code", "GU Name", "Entity Description",
+      the_geom
+ FROM "Billion_TON"."KDF_Frst_LOGT" 
+	JOIN "General_GIS_DATA"."Counties" ON (fcode=cnty_fips)
+ limit 5;
+
+SELECT index, year, scenario, price_trgt, basis, feedstck, fcode, produnit, 
+      production, "State Abbreviation", "State FIPS Code", "County FIPS Code", 
+      "FIPS Entity Code", "ANSI Code", "GU Name", "Entity Description",
+      the_geom
+ FROM "Billion_TON"."KDF_Frst_LOGT", "General_GIS_DATA"."Counties"
+ WHERE "Billion_TON"."KDF_Frst_LOGT".fcode = "General_GIS_DATA"."Counties".cnty_fips;
+
+-- Make a view to provide a "virtual table" that is read-only. This avoids duplicating data...
+CREATE OR REPLACE VIEW "Billion_TON"."KDF_Frst_LOGT_GIS" AS 
+SELECT index, year, scenario, price_trgt, basis, feedstck, fcode, produnit, 
+      production, "State Abbreviation", "State FIPS Code", "County FIPS Code", 
+      "FIPS Entity Code", "ANSI Code", "GU Name", "Entity Description",
+      the_geom
+ FROM "Billion_TON"."KDF_Frst_LOGT" 
+	JOIN "General_GIS_DATA"."Counties" ON (fcode=cnty_fips);
+
+ALTER TABLE "Billion_TON"."KDF_Frst_LOGT_GIS"
+ OWNER TO jdlara;
+
+-- Examine which columns form a unique set for this dataset.
+-- Start by guesing which columns might be unique, and count how many rows match each
+-- unique entry.
+SELECT year, scenario, price_trgt, basis, feedstck, fcode, count(*)
+ FROM "Billion_TON"."KDF_Frst_LOGT"
+ group by year, scenario, price_trgt, basis, feedstck, fcode
+ order by 7 desc
+ ;
+-- Add or remove columns from that list to hone in on what is a minimal set that describe unique rows.
+SELECT year, price_trgt, basis, fcode, count(*)
+ FROM "Billion_TON"."KDF_Frst_LOGT"
+ group by year, price_trgt, basis, fcode
+ order by 5 desc, 1, 2, 3, 4
+ ;
+-- Once you settle on a set of unique columns, make those into a primary key.
