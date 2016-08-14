@@ -92,7 +92,7 @@ if __name__ == '__main__':
     # This emulates what the pyomo command-line tools does
     from pyomo.opt import SolverFactory
     import pyomo.environ
-    opt = SolverFactory("glpk")
+    opt = SolverFactory("gurobi")
     results = opt.solve(model)
 # sends results to stdout
     results.write()
