@@ -27,7 +27,7 @@ df_anual = pd.DataFrame()
 df_totals = pd.DataFrame()
 driver.get("http://appcenter.grupoice.com/CenceWeb/CencePosdespachoNacional.jsf")
 
-calendar = driver.wait.until(EC.presence_of_element_located((By.ID, "formPosdespacho:pickFechaInputDate")))
+calendar = driver.wait.until(EC.presence_of_element_located((By.ID, "ui-datepicker-div")))
 
 calendar.click()
 
@@ -35,10 +35,10 @@ box = driver.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "rich-cal
 box.click()
 
 y = 1
-for year_i in range(2013, 2016):
+for year_i in range(2016, 2018):
 
-    print "Year Loop"
-    print year_i
+    print("Year Loop")
+    print(year_i)
 
     year = driver.wait.until(EC.presence_of_element_located((By.ID, "formPosdespacho:pickFechaDateEditorLayoutY" + str(y))))
     year.click()
@@ -48,7 +48,7 @@ for year_i in range(2013, 2016):
     df_month = pd.DataFrame()
     for month_i in range(1, 13):
 
-        print ' Month loop ' + str(month_i)
+        #print(' Month loop ' + str(month_i))
 
         month = driver.wait.until(EC.presence_of_element_located((By.ID, "formPosdespacho:pickFechaDateEditorLayoutM" + str(month_i - 1))))
         month.click()
@@ -67,7 +67,7 @@ for year_i in range(2013, 2016):
 
         time.sleep(1)
 
-        print ' day loop post-dispatch'
+        print("day loop post-dispatch")
 
         if month_i == 1:
             number_of_days = 31
@@ -96,7 +96,7 @@ for year_i in range(2013, 2016):
 
         for day_i in range(1, (number_of_days + 1)):
 
-            print "     " + str(day_i) + " " + str(month_i) + " " + str(year_i)
+            #print(("     " + str(day_i) + " " + str(month_i) + " " + str(year_i))
 
             calendar = driver.wait.until(EC.presence_of_element_located((By.ID, "formPosdespacho:pickFechaInputDate")))
             calendar.click()
@@ -157,8 +157,8 @@ box.click()
 y = 1
 for year_i in range(2013, 2016):
 
-    print "Year Loop"
-    print year_i
+    print("Year Loop")
+    print(year_i)
 
     year = driver.wait.until(EC.presence_of_element_located((By.ID, "formPredespacho:pickFechaDateEditorLayoutY" + str(y))))
     year.click()
@@ -168,7 +168,7 @@ for year_i in range(2013, 2016):
     df_month = pd.DataFrame()
     for month_i in range(1, 13):
 
-        print ' Month loop ' + str(month_i)
+        #print ' Month loop ' + str(month_i)
 
         month = driver.wait.until(EC.presence_of_element_located((By.ID, "formPredespacho:pickFechaDateEditorLayoutM" + str(month_i - 1))))
         month.click()
@@ -212,10 +212,10 @@ for year_i in range(2013, 2016):
         elif month_i == 12:
             number_of_days = 31
 
-        print ' day loop pre-dispatch'
+        #print ' day loop pre-dispatch'
         for day_i in range(1, (number_of_days + 1)):
 
-            print "     " + str(day_i) + " " + str(month_i) + " " + str(year_i)
+            #print "     " + str(day_i) + " " + str(month_i) + " " + str(year_i)
 
             calendar = driver.wait.until(EC.presence_of_element_located((By.ID, "formPredespacho:pickFechaInputDate")))
             calendar.click()
@@ -287,10 +287,10 @@ box = driver.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "rich-cal
 box.click()
 
 y = 3
-for year_i in range(2015, 2016):
+for year_i in range(2016, 2018):
 
-    print "Year Loop"
-    print year_i
+    print("Year Loop")
+    print(year_i)
 
     year = driver.wait.until(EC.presence_of_element_located((By.ID, "formIntercambios:pickFechaDateEditorLayoutY" + str(y))))
     year.click()
@@ -300,7 +300,7 @@ for year_i in range(2015, 2016):
     df_month = pd.DataFrame()
     for month_i in range(1, 13):
 
-        print ' Month loop ' + str(month_i)
+        #print ' Month loop ' + str(month_i)
 
         month = driver.wait.until(EC.presence_of_element_located((By.ID, "formIntercambios:pickFechaDateEditorLayoutM" + str(month_i - 1))))
         month.click()
@@ -319,7 +319,7 @@ for year_i in range(2015, 2016):
 
         time.sleep(1)
 
-        print ' day loop Transfers'
+       # print' day loop Transfers'
 
         if month_i == 1:
             number_of_days = 31
@@ -348,7 +348,7 @@ for year_i in range(2015, 2016):
 
         for day_i in range(1, (number_of_days + 1)):
 
-            print "     " + str(day_i) + " " + str(month_i) + " " + str(year_i)
+            #print "     " + str(day_i) + " " + str(month_i) + " " + str(year_i)
 
             calendar = driver.wait.until(EC.presence_of_element_located((By.ID, "formIntercambios:pickFechaInputDate")))
             calendar.click()
