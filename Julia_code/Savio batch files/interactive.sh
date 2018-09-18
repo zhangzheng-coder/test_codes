@@ -1,0 +1,1 @@
+srun --unbuffered --partition=savio --qos=savio_normal --account=ac_scsguest --time=00:30:00 bash -i

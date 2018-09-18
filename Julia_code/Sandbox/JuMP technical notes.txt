@@ -1,0 +1,7 @@
+No, constraintref does not register the constraint name. You can do
+
+JuMP.registercon(m, :myCons, myCons)
+to register it manually
+
+The addition of Nullabled to the types requires the use of ``get()`` to access the value, which can
+be inconvenient.
